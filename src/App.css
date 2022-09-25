@@ -135,6 +135,11 @@ body {
   font-size:18pt;
 }
 
+.song-card-button {
+  float:right;
+  font-size:18pt
+}
+
 .playlister-button, .playlister-button-disabled {
   font-size:36pt;
   border-width: 0px;

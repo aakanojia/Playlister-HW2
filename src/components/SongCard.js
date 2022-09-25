@@ -84,7 +84,7 @@ export default class SongCard extends React.Component {
                 </a>
                 <input
                         type="button"
-                        className="song-card-button"
+                        className="song-delete-button"
                         value={"X"} />
             </div>
         )

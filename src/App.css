@@ -135,7 +135,7 @@ body {
   font-size:18pt;
 }
 
-.song-card-button {
+.song-delete-button {
   float:right;
   font-size:18pt
 }
@@ -234,7 +234,7 @@ input {
   grid-template-columns: 30% 65%;
   grid-template-rows: 33% 33% 33%;
   gap: 10px 20px;
-  font-size: 48pt;
+  font-size: 28pt;
 }
 
 span {

@@ -82,6 +82,7 @@ body {
   display: flex;
   flex-direction: row;
   overflow: auto;
+  align-items: center;
   background-color: var(--swatch-primary);
 }
 
@@ -159,7 +160,7 @@ body {
 }
 
 .playlister-song, .playlister-song-dragged-to { 
-  display:flex;
+  display: flex;
   align-items: center;
   font-size: 24pt;  
   height:20%;

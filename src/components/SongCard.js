@@ -9,11 +9,11 @@ export default class SongCard extends React.Component {
             draggedTo: false
         }
     }
-    handleEditSong= (event) => {
-        let songIndex = Number.parseInt(event.target.id.split('-')[1] - 1)
-        //event.stopPropagation();
-        let song = this.props.song;
-        this.props.editSongCallback(song);
+    handleEditSong = (event) => {
+        let index = this.getItemNum() - 1;
+
+        this.props.editSongCallback(index);
+        
     }
     handleDragStart = (event) => {
         event.dataTransfer.setData("song", event.target.id);

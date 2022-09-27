@@ -7,9 +7,11 @@ import jsTPS from './common/jsTPS.js';
 
 // OUR TRANSACTIONS
 import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
+import EditSong_Transaction from './transactions/EditSong_Transaction.js';
 
 // THESE REACT COMPONENTS ARE MODALS
 import DeleteListModal from './components/DeleteListModal.js';
+import EditSongModal from './components/EditSongModal';
 
 // THESE REACT COMPONENTS ARE IN OUR UI
 import Banner from './components/Banner.js';
@@ -18,7 +20,8 @@ import PlaylistCards from './components/PlaylistCards.js';
 import SidebarHeading from './components/SidebarHeading.js';
 import SidebarList from './components/SidebarList.js';
 import Statusbar from './components/Statusbar.js';
-import EditSongModal from './components/EditSongModal';
+
+const emptySong = {title: " ", artist: " ", youTubeId: " "};
 
 class App extends React.Component {
     constructor(props) {
@@ -35,7 +38,7 @@ class App extends React.Component {
 
         // SETUP THE INITIAL STATE
         this.state = {
-            listSongMarkedForEdit : "",
+            listSongMarkedForEdit : null,
             listKeyPairMarkedForDeletion : null,
             currentList : null,
             sessionData : loadedSessionData
@@ -130,16 +133,18 @@ class App extends React.Component {
         this.deleteList(this.state.listKeyPairMarkedForDeletion.key);
         this.hideDeleteListModal();
     }
-    editSong = () => {
-
-        this.state.listSongMarkedForEdit.title = document.getElementById("edit-song-modal-title-textfield").value;
-        this.state.listSongMarkedForEdit.artist = document.getElementById("edit-song-modal-artist-textfield").value;
-        this.state.listSongMarkedForEdit.youTubeId = document.getElementById("edit-song-modal-youTubeId-textfield").value;
-
+    editSong = (index, editedSong) => {
+        let list = this.state.currentList;
+        list.songs[index] = editedSong;
+        this.setStateWithUpdatedList(list)
     }
-    editMarkedSong = () => {
-        this.editSong()
+    editMarkedSong = (song) => {
+        this.addEditSongTransaction(this.state.listSongMarkedForEdit, song)
         this.hideEditSongModal();
+    }
+    addEditSongTransaction = (index, song) => {
+        let transaction = new EditSong_Transaction(this, index, this.state.currentList.songs[index], song);
+        this.tps.addTransaction(transaction);
     }
     // THIS FUNCTION SPECIFICALLY DELETES THE CURRENT LIST
     deleteCurrentList = () => {
@@ -276,11 +281,17 @@ class App extends React.Component {
             this.showDeleteListModal();
         });
     }
-    markSongforEdit = song => {
+    markSongforEdit = (index) => {
+        let song = this.state.currentList.songs[index];
+
+        document.getElementById("title-textfield").value = song.title;
+        document.getElementById("artist-textfield").value = song.artist;
+        document.getElementById("youTubeId-textfield").value = song.youTubeId;
+
         this.setState(prevState => ({
             currentList: prevState.currentList,
-            listSongMarkedForEdit : song,
-            sessionData: prevState.sessionData
+            sessionData: prevState.sessionData,
+            listSongMarkedForEdit : index,
         }), () => {
             this.showEditSongModal();
         });
@@ -297,6 +308,7 @@ class App extends React.Component {
         modal.classList.remove("is-visible");
     }
     showEditSongModal() {
+        console.log(this.state.listSongMarkedForEdit)
         let modal = document.getElementById("edit-song-modal");
         modal.classList.add("is-visible");
     }
@@ -345,7 +357,9 @@ class App extends React.Component {
                 <EditSongModal
                     hideEditSongModalCallback={this.hideEditSongModal}
                     editSongCallback={this.editMarkedSong}
-                    editSong={this.state.listSongMarkedForEdit}
+                    editSong={
+                        this.state.listSongMarkedForEdit == null ? emptySong :
+                        this.state.currentList.songs[this.state.listSongMarkedForEdit]}
                 />
             </div>
         );

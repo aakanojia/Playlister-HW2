@@ -370,13 +370,26 @@ class App extends React.Component {
         let modal = document.getElementById("remove-song-modal");
         modal.classList.remove("is-visible");
     }
+    handleKeyDown = (event) => {
+        if(event.ctrlKey) {
+            if (event.keyCode === 90) {
+                if (this.tps.hasTransactionToUndo()) {this.undo();}
+                event.preventDefault();
+            }
+            else if (event.keyCode === 89) {
+                if (this.tps.hasTransactionToRedo()) {this.redo();}
+            }
+        }
+    };
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
         let canRedo = this.tps.hasTransactionToRedo();
         let canClose = this.state.currentList !== null;
+
+        
         return (
-            <div id="root">
+            <div id="root" onKeyDown={this.handleKeyDown}>
                 <Banner />
                 <SidebarHeading
                     createNewListCallback={this.createNewList}

@@ -15,6 +15,11 @@ export default class SongCard extends React.Component {
         this.props.editSongCallback(index);
         
     }
+    handleDeleteSong = (event) => {
+        let index = this.getItemNum() - 1;
+
+        this.props.deleteSongCallback(index);
+    }
     handleDragStart = (event) => {
         event.dataTransfer.setData("song", event.target.id);
         this.setState(prevState => ({
@@ -90,9 +95,11 @@ export default class SongCard extends React.Component {
                 {song.title} by {song.artist}
                 </a>
                 <input
-                        type="button"
-                        className="song-delete-button"
-                        value={"X"} />
+                    type="button"
+                    className="song-delete-button"
+                    value={"X"} 
+                    onClick={this.handleDeleteSong}
+                />
             </div>
         )
     }
